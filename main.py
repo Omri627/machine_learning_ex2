@@ -1,6 +1,7 @@
 import sys
 import pandas as pd
 import numpy as np
+import perceptron
 from scipy import stats
 
 
@@ -43,10 +44,9 @@ def main():
     encoding(data_arr)
     data_set = np.array(data_arr, dtype=float)
     data_set = z_score(data_set)
-
     df = pd.read_csv(sys.argv[2], header=None)
     label_set = np.array(df.iloc[:, :])
-    print(label_set)
+    perceptron.perceptron(data_set, label_set)
 
 
 if __name__ == "__main__":
