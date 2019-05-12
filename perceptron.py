@@ -24,7 +24,7 @@ def test(w, X, Y):
     err = 0
     samples_size = len(X)
     for i in range(0, samples_size):
-        y_hat = np.argmax(w, X[i])
+        y_hat = np.argmax(np.dot(w, X[i]))
         y = int(Y[i])
         if y_hat != y:
             err += 1
