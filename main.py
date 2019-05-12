@@ -1,7 +1,7 @@
 import sys
 import pandas as pd
 import numpy as np
-from scipy import __all__ as sc
+from scipy import stats
 
 
 def one_hot_encoding(data):
@@ -28,13 +28,13 @@ def encoding(data):
 
 def z_score(data):
     data = np.array(data)
-    return sc.stats.mstats.zscore(data)
+    return stats.mstats.zscore(data)
 
 
 def main():
     # header for the data
-    header = ['Sex', 'Length', 'Diameter', 'Height', 'W weight', 'S weight', 'V weight', 'Shell weight'] \
-        # read data from csv to data frame
+    header = ['Sex', 'Length', 'Diameter', 'Height', 'W weight', 'S weight', 'V weight', 'Shell weight']
+    # read data from csv to data frame
     df = pd.read_csv(sys.argv[1], names=header)  # df = data frame
     # transfer the data to numpy array
     data_arr = np.array(df.iloc[:, 0:],
@@ -43,7 +43,7 @@ def main():
     encoding(data_arr)
     data_set = np.array(data_arr, dtype=float)
     data_set = z_score(data_set)
-    print(data_arr)
+    print(data_set)
 
 
 if __name__ == "__main__":
