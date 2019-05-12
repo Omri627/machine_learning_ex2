@@ -46,7 +46,7 @@ def main():
     data_set = z_score(data_set)
     df = pd.read_csv(sys.argv[2], header=None)
     label_set = np.array(df.iloc[:, :])
-    perceptron.perceptron(data_set, label_set)
+    perceptron.train(data_set, label_set)
 
 
 if __name__ == "__main__":
