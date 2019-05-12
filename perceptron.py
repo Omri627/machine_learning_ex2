@@ -12,11 +12,20 @@ def train(X, Y):
     for t in range(0, samples_size):
         # choose id of  random example from samples set
         i = random.randint(0, samples_size - 1)
-        x = np.dot(w, X[i])
-        y_hat = np.argmax(x)
+        y_hat = np.argmax(np.dot(w, X[i]))
         y = int(Y[i])
         if y_hat != y:
             w[y_hat] = w[y_hat] - eta * X[i]
             w[y] = w[y] + eta * X[i]
-
     return w
+
+
+def test(w, X, Y):
+    err = 0
+    samples_size = len(X)
+    for i in range(0, samples_size):
+        y_hat = np.argmax(w, X[i])
+        y = int(Y[i])
+        if y_hat != y:
+            err += 1
+    return float(err) / samples_size
