@@ -14,8 +14,13 @@ def one_hot_encoding(data):
         data[i][0] = encode[row[0]]
 
 
-header = ['Sex', 'Length', 'Diameter', 'Height', 'W weight', 'S weight', 'V weight', 'Shell weight']
-df = pd.read_csv(sys.argv[1], names=header)  # df = data frame
-dataArr = np.array(df.iloc[:, 0:])  # return all the indexes, all rows from 0 to 3286 and columns from 0 to all
-one_hot_encoding(dataArr)
-print(dataArr)
+def main():
+    header = ['Sex', 'Length', 'Diameter', 'Height', 'W weight', 'S weight', 'V weight', 'Shell weight']
+    df = pd.read_csv(sys.argv[1], names=header)  # df = data frame
+    data_arr = np.array(df.iloc[:, 0:])  # return all the indexes, all rows from 0 to 3286 and columns from 0 to all
+    one_hot_encoding(data_arr)
+    print(data_arr)
+
+
+if __name__ == "__main__":
+    main()
