@@ -45,7 +45,7 @@ def main():
     data_set = np.array(data_arr, dtype=float)
     data_set = z_score(data_set)
     df = pd.read_csv(sys.argv[2], header=None)
-    label_set = np.array(df.iloc[:, :])
+    label_set = np.array(df.iloc[:, :], dtype=float)
     perceptron.train(data_set, label_set)
 
 

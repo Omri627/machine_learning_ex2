@@ -1,5 +1,7 @@
 import numpy as np
 import random
+
+
 # X: samples Y:labels
 def train(X, Y):
     samples_size = len(X)
@@ -12,8 +14,8 @@ def train(X, Y):
         i = random.randint(0, samples_size - 1)
         x = np.dot(w, X[i])
         y_hat = np.argmax(x)
-        y = Y[i]
-        if (y_hat != y):
+        y = int(Y[i])
+        if y_hat != y:
             w[y_hat] = w[y_hat] - eta * X[i]
             w[y] = w[y] + eta * X[i]
 
