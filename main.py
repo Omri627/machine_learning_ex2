@@ -43,7 +43,10 @@ def main():
     encoding(data_arr)
     data_set = np.array(data_arr, dtype=float)
     data_set = z_score(data_set)
-    print(data_set)
+
+    df = pd.read_csv(sys.argv[2], header=None)
+    label_set = np.array(df.iloc[:, :])
+    print(label_set)
 
 
 if __name__ == "__main__":
