@@ -50,8 +50,8 @@ def main():
     samples_size = len(data_set)
     label_size = len(label_set)
     # split the data set to 80% training set and 20% to the test set
-    split_data = np.split(data_set, [int(0.8*samples_size), samples_size])
-    split_label = np.split(label_set, [int(0.8*label_size), label_size])
+    split_data = np.split(data_set, [int(0.9*samples_size), samples_size])
+    split_label = np.split(label_set, [int(0.9*label_size), label_size])
     w = perceptron.train(split_data[0], split_label[0])
     print(perceptron.test(w, split_data[1],split_label[1]))
 

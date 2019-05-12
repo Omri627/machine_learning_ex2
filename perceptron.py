@@ -9,6 +9,7 @@ def train(X, Y):
     eta = 0.1
     # weights matrix
     w = np.zeros((3, features_size))
+    # X, Y = random.shuffle(X, Y, random_state=1)
     for t in range(0, samples_size):
         # choose id of  random example from samples set
         i = random.randint(0, samples_size - 1)
