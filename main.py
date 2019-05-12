@@ -27,15 +27,22 @@ def encoding(data):
 
 
 def z_score(data):
+    data = np.array(data)
     return sc.stats.mstats.zscore(data)
 
 
 def main():
-    header = ['Sex', 'Length', 'Diameter', 'Height', 'W weight', 'S weight', 'V weight', 'Shell weight']
+    # header for the data
+    header = ['Sex', 'Length', 'Diameter', 'Height', 'W weight', 'S weight', 'V weight', 'Shell weight'] \
+        # read data from csv to data frame
     df = pd.read_csv(sys.argv[1], names=header)  # df = data frame
-    data_arr = np.array(df.iloc[:, 0:])  # return all the indexes, all rows from 0 to 3286 and columns from 0 to all
+    # transfer the data to numpy array
+    data_arr = np.array(df.iloc[:, 0:],
+                        dtype="|U5")  # return all the indexes, all rows from 0 to 3286 and columns from 0 to all
+    # change the M F I to 0 1 2
     encoding(data_arr)
-    data_arr = z_score(data_arr)
+    data_set = np.array(data_arr, dtype=float)
+    data_set = z_score(data_set)
     print(data_arr)
 
 
