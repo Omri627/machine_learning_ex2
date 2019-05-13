@@ -1,6 +1,7 @@
 import numpy as np
 import random
 
+
 # X: samples Y:labels
 def train(X, Y, eta, regulation):
     samples_size = len(X)
@@ -20,8 +21,8 @@ def train(X, Y, eta, regulation):
             y = int(Y[i])
             if y != y_hat:
                 if calculations[y_hat] - calculations[y] >= 1:
-                    w[y_hat] = w[y_hat] + eta * [ -1 * y_hat * X[i] + regulation * w[i]]
-                    w[y] = w[y] - eta * [ -1 * y_hat * X[i] + regulation * w[i]]
+                    w[y_hat] = w[y_hat] + eta * [-1 * y_hat * X[i] + regulation * w[i]]
+                    w[y] = w[y] - eta * [-1 * y_hat * X[i] + regulation * w[i]]
                 else:
                     w[y_hat] = w[y_hat] + eta * regulation * w[y_hat]
                     w[y] = w[y] - eta * regulation * w[y_hat]
@@ -41,12 +42,13 @@ def train(X, Y, eta, regulation):
         y_hat = np.argmax(calculations)
         y = int(Y[i])
         if y != y_hat and abs(calculations[y] - calculations[y_hat]) >= 1:
-            w[y_hat] = w[y_hat] - eta * [ -1 * y_hat * X[i] + regulation * w[y_hat]]
-            w[y] = w[y] + eta * [ -1 * y_hat * X[i] + regulation * w[y_hat]]
+            w[y_hat] = w[y_hat] - eta * [-1 * y_hat * X[i] + regulation * w[y_hat]]
+            w[y] = w[y] + eta * [-1 * y_hat * X[i] + regulation * w[y_hat]]
         elif y != y_hat and abs(calculations[y] - calculations[y_hat]) < 1:
             w[y_hat] = w[y_hat] - eta * X[i] * w[y_hat]
             w[y] = w[y] + eta * X[i] * w[y]
     return w
+
 
 def test(w, X, Y):
     err = 0
@@ -58,6 +60,6 @@ def test(w, X, Y):
             err += 1
     return float(err) / samples_size
 
+
 def predict(w, input):
     return np.argmax(w, input)
-
