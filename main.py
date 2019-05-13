@@ -2,6 +2,7 @@ import sys
 import numpy as np
 import perceptron
 import svm
+import passive_aggressive as pa
 from scipy import stats
 
 
@@ -67,7 +68,8 @@ def main():
     print("******************")
     w2 = svm.train(split_data[0], split_label[0], 0.005, 0.005)
     print(svm.test(w2, split_data[1], split_label[1]))
-
+    w3 = pa.train(split_data[0], split_label[0], 0.005)
+    print(pa.test(w3, split_data[1], split_label[1]))
 
 if __name__ == "__main__":
     main()

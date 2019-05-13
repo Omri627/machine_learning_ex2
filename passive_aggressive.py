@@ -1,11 +1,11 @@
 import numpy as np
 import random
+import math
 
 # X: samples Y:labels
-def train(X, Y):
+def train(X, Y, eta):
     samples_size = len(X)
     features_size = len(X[0])
-    eta = 0.1
     # weights matrix
     w = np.zeros((3, features_size))
     indexes = np.arange(0, samples_size)
@@ -18,9 +18,13 @@ def train(X, Y):
             i = indexes[t]
             y_hat = np.argmax(np.dot(w, X[i]))
             y = int(Y[i])
+            normalized_x = normalize(X[i])
+            tau = np.zeros(3)
+            for k in range(0, 3):
+                tau[k] = (max(0, 1 - y_hat * w[k] * X[i])) / (2 * normalized_x * normalized_x)
             if y_hat != y:
-                w[y_hat] = w[y_hat] - eta * X[i]
-                w[y] = w[y] + eta * X[i]
+                w[y_hat] = w[y_hat] - tau[y_hat] * X[i]
+                w[y] = w[y] + tau[y] * X[i]
     return w
 
 def test(w, X, Y):
@@ -36,3 +40,8 @@ def test(w, X, Y):
 def predict(w, input):
     return np.argmax(w, input)
 
+def normalize(vector):
+    sum = 0
+    for x in vector:
+        sum = sum + x * x
+    return math.sqrt(sum)
