@@ -1,5 +1,4 @@
 import sys
-import pandas as pd
 import numpy as np
 import perceptron
 import svm
@@ -40,19 +39,14 @@ def unison_shuffled_copies(a, b):
 
 
 def main():
-    # header for the data
-    header = ['Sex', 'Length', 'Diameter', 'Height', 'W weight', 'S weight', 'V weight', 'Shell weight']
+
     # read data from csv to data frame
-    df = pd.read_csv(sys.argv[1], names=header)  # df = data frame
-    # transfer the data to numpy array
-    data_arr = np.array(df.iloc[:, 0:],
-                        dtype="|U5")  # return all the indexes, all rows from 0 to 3286 and columns from 0 to all
+    data_arr = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
     # change the M F I to 0 1 2
     encoding(data_arr)
     data_set = np.array(data_arr, dtype=float)
     data_set = z_score(data_set)
-    df = pd.read_csv(sys.argv[2], header=None)
-    label_set = np.array(df.iloc[:, :], dtype=float)
+    label_set = np.genfromtxt(sys.argv[2], delimiter=',', dtype=float)
 
     # shuffle the data
     data_set, label_set = unison_shuffled_copies(data_set, label_set)
@@ -62,11 +56,13 @@ def main():
     # split the data set to 80% training set and 20% to the test set
     split_data = np.split(data_set, [int(0.8 * samples_size), samples_size])
     split_label = np.split(label_set, [int(0.8 * label_size), label_size])
+
     w = perceptron.train(split_data[0], split_label[0])
     print(perceptron.test(w, split_data[1], split_label[1]))
-    print "******************"
+    print("******************")
     w2 = svm.train(split_data[0], split_label[0], 0.5, 0.5)
     print(svm.test(w2, split_data[1], split_label[1]))
+
 
 if __name__ == "__main__":
     main()
