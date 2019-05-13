@@ -9,15 +9,20 @@ def train(X, Y):
     eta = 0.1
     # weights matrix
     w = np.zeros((3, features_size))
-    # X, Y = random.shuffle(X, Y, random_state=1)
-    for t in range(0, samples_size):
-        # choose id of  random example from samples set
-        i = random.randint(0, samples_size - 1)
-        y_hat = np.argmax(np.dot(w, X[i]))
-        y = int(Y[i])
-        if y_hat != y:
-            w[y_hat] = w[y_hat] - eta * X[i]
-            w[y] = w[y] + eta * X[i]
+    indexes = np.arange(0, samples_size)
+    epochs = 10
+    for e in range(epochs):
+        # shuffle the data
+        random.shuffle(indexes)
+        for t in range(0, samples_size):
+            # choose id of random example from samples set
+            i = indexes[t]
+            y_hat = np.argmax(np.dot(w, X[i]))
+            y = int(Y[i])
+            if y_hat != y:
+                w[y_hat] = w[y_hat] - eta * X[i]
+                w[y] = w[y] + eta * X[i]
+
     return w
 
 

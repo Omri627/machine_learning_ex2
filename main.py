@@ -18,9 +18,9 @@ def one_hot_encoding(data):
 
 def encoding(data):
     encode = {
-        "M": 0,
-        "F": 1,
-        "I": 2
+        "M": -1,
+        "F": 0,
+        "I": 1
     }
     for i, row in enumerate(data):
         # transform it into vector
@@ -30,6 +30,12 @@ def encoding(data):
 def z_score(data):
     data = np.array(data)
     return stats.mstats.zscore(data)
+
+
+def unison_shuffled_copies(a, b):
+    assert len(a) == len(b)
+    p = np.random.permutation(len(a))
+    return a[p], b[p]
 
 
 def main():
@@ -47,13 +53,16 @@ def main():
     df = pd.read_csv(sys.argv[2], header=None)
     label_set = np.array(df.iloc[:, :], dtype=float)
 
+    # shuffle the data
+    data_set, label_set = unison_shuffled_copies(data_set, label_set)
+
     samples_size = len(data_set)
     label_size = len(label_set)
     # split the data set to 80% training set and 20% to the test set
-    split_data = np.split(data_set, [int(0.9*samples_size), samples_size])
-    split_label = np.split(label_set, [int(0.9*label_size), label_size])
+    split_data = np.split(data_set, [int(0.9 * samples_size), samples_size])
+    split_label = np.split(label_set, [int(0.9 * label_size), label_size])
     w = perceptron.train(split_data[0], split_label[0])
-    print(perceptron.test(w, split_data[1],split_label[1]))
+    print(perceptron.test(w, split_data[1], split_label[1]))
 
 
 if __name__ == "__main__":
