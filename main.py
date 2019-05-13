@@ -18,9 +18,9 @@ def one_hot_encoding(data):
 
 def encoding(data):
     encode = {
-        "M": -1,
-        "F": 0,
-        "I": 1
+        "M": 1,
+        "F": 2,
+        "I": 3
     }
     for i, row in enumerate(data):
         # transform it into vector
@@ -32,6 +32,11 @@ def z_score(data):
     return stats.mstats.zscore(data)
 
 
+def min_max_normalization(data):
+    for i, x in enumerate(data):
+        data[i] = ((x - np.min(x)) / (np.max(x) - np.min(x)))
+
+
 def unison_shuffled_copies(a, b):
     assert len(a) == len(b)
     p = np.random.permutation(len(a))
@@ -39,13 +44,13 @@ def unison_shuffled_copies(a, b):
 
 
 def main():
-
     # read data from csv to data frame
     data_arr = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
     # change the M F I to 0 1 2
     encoding(data_arr)
     data_set = np.array(data_arr, dtype=float)
     data_set = z_score(data_set)
+    # load labels
     label_set = np.genfromtxt(sys.argv[2], delimiter=',', dtype=float)
 
     # shuffle the data
@@ -60,7 +65,7 @@ def main():
     w = perceptron.train(split_data[0], split_label[0])
     print(perceptron.test(w, split_data[1], split_label[1]))
     print("******************")
-    w2 = svm.train(split_data[0], split_label[0], 0.5, 0.5)
+    w2 = svm.train(split_data[0], split_label[0], 0.005, 0.005)
     print(svm.test(w2, split_data[1], split_label[1]))
 
 
