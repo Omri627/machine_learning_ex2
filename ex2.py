@@ -49,7 +49,43 @@ def unison_shuffled_copies(a, b):
     return a[p], b[p]
 
 
+def real_time():
+    # read data from csv to data frame
+    data_arr = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
+    # change the M F I to 0 1 2
+    data_arr = one_hot_encoding(data_arr)
+
+    test_x = np.genfromtxt(sys.argv[2], delimiter=',', dtype="|U5")
+    test_x = one_hot_encoding(test_x)
+    test_x = np.array(test_x, dtype=float)
+    test_x = z_score(test_x)
+    # normalize the data-set
+    data_set = np.array(data_arr, dtype=float)
+    data_set = z_score(data_set)
+
+    # load labels file
+    label_set = np.genfromtxt(sys.argv[2], delimiter=',', dtype=float)
+
+    # shuffle the data
+    data_set, label_set = unison_shuffled_copies(data_set, label_set)
+
+    # split the data set to 80% training set and 20% to the test set
+    samples_size = len(data_set)
+    label_size = len(label_set)
+    split_data = np.split(data_set, [int(0.90 * samples_size), samples_size])
+    split_label = np.split(label_set, [int(0.90 * label_size), label_size])
+
+    m_perc = perceptron.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1)
+
+    m_svm = svm.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1, 0.5)
+
+    m_pa = pa.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1])
+
+    tester.print_results(m_perc, m_svm, m_pa, test_x)
+
+
 def main():
+    '''
     # read data from csv to data frame
     data_arr = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
     # change the M F I to 0 1 2
@@ -90,18 +126,11 @@ def main():
     print(error_rate)
 
     print("******************")
-    tester.print_results(m_pa, m_svm, m_pa, test_x)
+    tester.print_results(m_perc, m_svm, m_pa, test_x)
+    '''
 
-    """
-    w = perceptron.train(split_data[0], split_label[0], 0.1)
-    print(perceptron.test(w, split_data[1], split_label[1]))
-    print("******************")
-    w2 = svm.train(split_data[0], split_label[0], 0.1, 0.5)
-    print(svm.test(w2, split_data[1], split_label[1]))
-    print("******************")
-    w3 = pa.train(split_data[0], split_label[0])
-    print(pa.test(w3, split_data[1], split_label[1]))
-    """
+    real_time()
+
 
 if __name__ == "__main__":
     main()
