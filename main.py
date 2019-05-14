@@ -1,5 +1,6 @@
 import sys
 import numpy as np
+import tester
 import perceptron
 import svm
 import passive_aggressive as pa
@@ -49,27 +50,33 @@ def main():
     data_arr = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
     # change the M F I to 0 1 2
     encoding(data_arr)
+
+    # normalize the data-set
     data_set = np.array(data_arr, dtype=float)
     data_set = z_score(data_set)
-    # load labels
+
+    # load labels file
     label_set = np.genfromtxt(sys.argv[2], delimiter=',', dtype=float)
 
     # shuffle the data
     data_set, label_set = unison_shuffled_copies(data_set, label_set)
 
+    # split the data set to 80% training set and 20% to the test set
     samples_size = len(data_set)
     label_size = len(label_set)
-    # split the data set to 80% training set and 20% to the test set
-    split_data = np.split(data_set, [int(0.8 * samples_size), samples_size])
-    split_label = np.split(label_set, [int(0.8 * label_size), label_size])
-
-    w = perceptron.train(split_data[0], split_label[0])
+    split_data = np.split(data_set, [int(0.7 * samples_size), samples_size])
+    split_label = np.split(label_set, [int(0.7 * label_size), label_size])
+    tester.test_pa(split_data[0], split_label[0], split_data[1], split_label[1])
+    """
+    w = perceptron.train(split_data[0], split_label[0], 0.1)
     print(perceptron.test(w, split_data[1], split_label[1]))
     print("******************")
-    w2 = svm.train(split_data[0], split_label[0], 0.005, 0.005)
+    w2 = svm.train(split_data[0], split_label[0], 0.1, 0.5)
     print(svm.test(w2, split_data[1], split_label[1]))
-    w3 = pa.train(split_data[0], split_label[0], 0.005)
+    print("******************")
+    w3 = pa.train(split_data[0], split_label[0])
     print(pa.test(w3, split_data[1], split_label[1]))
+    """
 
 if __name__ == "__main__":
     main()

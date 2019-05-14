@@ -3,32 +3,37 @@ import random
 import math
 
 # X: samples Y:labels
-def train(X, Y, eta):
+def train(X, Y):
+    # quantity of samples in training set
     samples_size = len(X)
+    # quantity of features of each sample
     features_size = len(X[0])
+    classes = 3
     # weights matrix
-    w = np.zeros((3, features_size))
+    w = np.zeros((classes, features_size))
     indexes = np.arange(0, samples_size)
-    epochs = 10
-    for e in range(epochs):
+    epochs = 20
+    for e in range(0, epochs):
         # shuffle the data
         random.shuffle(indexes)
         for t in range(0, samples_size):
             # choose id of random example from samples set
             i = indexes[t]
-            y_hat = np.argmax(np.dot(w, X[i]))
+            # prediction of the model
+            classes_value = np.dot(w, X[i])
+            y_hat = np.argmax(classes_value)
+            # label of current sample
             y = int(Y[i])
-            normalized_x = normalize(X[i])
-            tau = np.zeros(3)
-            for k in range(0, 3):
-                tau[k] = (max(0, 1 - y_hat * w[k] * X[i])) / (2 * normalized_x * normalized_x)
             if y_hat != y:
-                w[y_hat] = w[y_hat] - tau[y_hat] * X[i]
-                w[y] = w[y] + tau[y] * X[i]
+                norm_x = norm(X[i])
+                loss = max(0, 1 - classes_value[y] + classes_value[y_hat])
+                tau = loss / (2 * norm_x * norm_x)
+                w[y_hat] = w[y_hat] - tau * X[i]
+                w[y] = w[y] + tau * X[i]
     return w
 
 def test(w, X, Y):
-    err = 0
+    err = 0         # error counter
     samples_size = len(X)
     for i in range(0, samples_size):
         y_hat = np.argmax(np.dot(w, X[i]))
@@ -40,8 +45,8 @@ def test(w, X, Y):
 def predict(w, input):
     return np.argmax(w, input)
 
-def normalize(vector):
+def norm(vector):
     sum = 0
     for x in vector:
-        sum = sum + x * x
+        sum = sum + (x * x)
     return math.sqrt(sum)

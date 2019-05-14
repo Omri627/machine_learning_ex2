@@ -2,26 +2,27 @@ import numpy as np
 import random
 
 # X: samples Y:labels
-def train(X, Y):
+def train(X, Y, eta):
     samples_size = len(X)
     features_size = len(X[0])
-    eta = 0.1
     # weights matrix
     w = np.zeros((3, features_size))
     indexes = np.arange(0, samples_size)
-    epochs = 10
+    # the number of times to run through the training data while updating the weight.
+    epochs = 20
     for e in range(epochs):
         # shuffle the data
         random.shuffle(indexes)
         for t in range(0, samples_size):
             # choose id of random example from samples set
             i = indexes[t]
+            # prediction of model
             y_hat = np.argmax(np.dot(w, X[i]))
+            # label of current sample
             y = int(Y[i])
             if y_hat != y:
                 w[y_hat] = w[y_hat] - eta * X[i]
                 w[y] = w[y] + eta * X[i]
-
     return w
 
 def test(w, X, Y):

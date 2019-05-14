@@ -4,10 +4,11 @@ import random
 
 # X: samples Y:labels
 def train(X, Y, eta, regulation):
+    classes = 3
     samples_size = len(X)
     features_size = len(X[0])
     # weights matrix
-    w = np.zeros((3, features_size))
+    w = np.zeros((classes, features_size))
     indexes = np.arange(0, samples_size)
     epochs = 10
     for e in range(epochs):
@@ -19,7 +20,7 @@ def train(X, Y, eta, regulation):
             y_hat = np.argmax(np.dot(w, X[i]))
             y = int(Y[i])
             if y != y_hat:
-                other = 3 - y - y_hat
+                other = classes - y - y_hat
                 w[y_hat] = w[y_hat] * (1 - eta * regulation) - eta * X[i]
                 w[y] = w[y] * (1 - eta * regulation) + eta * X[i]
                 w[other] = w[other] * (1 - eta * regulation)
