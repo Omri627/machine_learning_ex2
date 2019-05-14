@@ -75,17 +75,23 @@ def main():
     label_size = len(label_set)
     split_data = np.split(data_set, [int(0.90 * samples_size), samples_size])
     split_label = np.split(label_set, [int(0.90 * label_size), label_size])
-    model = perceptron.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1)
-    error_rate = perceptron.test(model, test_x, test_y)
+
+    m_perc = perceptron.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1)
+    error_rate = perceptron.test(m_perc, test_x, test_y)
     print error_rate
     print "*****************"
-    model = svm.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1, 0.5)
-    error_rate = svm.test(model, test_x, test_y)
+
+    m_svm = svm.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1, 0.5)
+    error_rate = svm.test(m_svm, test_x, test_y)
     print error_rate
     print "******************"
-    model = pa.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1])
-    error_rate = pa.test(model, test_x, test_y)
+    m_pa = pa.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1])
+    error_rate = pa.test(m_pa, test_x, test_y)
     print error_rate
+
+    print "******************"
+    tester.print_results(m_pa, m_svm, m_pa, test_x)
+
     """
     w = perceptron.train(split_data[0], split_label[0], 0.1)
     print(perceptron.test(w, split_data[1], split_label[1]))

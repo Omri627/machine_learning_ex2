@@ -26,7 +26,7 @@ def train(X, Y):
             # label of current sample
             y = int(Y[i])
             if y_hat != y:
-                norm_x = norm(X[i])
+                norm_x = np.linalg.norm(X[i])
                 loss = max(0, 1 - classes_value[y] + classes_value[y_hat])
                 tau = loss / (2 * norm_x * norm_x)
                 w[y_hat] = w[y_hat] - tau * X[i]

@@ -5,6 +5,14 @@ import svm
 import passive_aggressive as pa
 import matplotlib.pyplot as plt
 
+def print_results(m_percepton, m_svm, m_pa , test_X):
+    samples_size = len(test_X)
+    for i in range(0, samples_size):
+        y_perc = np.argmax(np.dot(m_percepton, test_X[i]))
+        y_svm = np.argmax(np.dot(m_svm, test_X[i]))
+        y_pa = np.argmax(np.dot(m_pa, test_X[i]))
+        print "perceptron:", y_perc, ", svm:", y_svm, ", pa:", y_pa
+
 def test_peceptron(X, Y, testX, testY):
     test_amount = 15
     result = np.zeros(test_amount)
