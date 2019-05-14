@@ -37,8 +37,10 @@ def test(w, X, Y):
             err += 1
     return float(err) / samples_size
 
+
 def predict(w, input):
     return np.argmax(w, input)
+
 
 def getBestModel(Train_X, Train_Y, Test_X, Test_Y, eta, regulation):
     instances = 15

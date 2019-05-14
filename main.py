@@ -78,18 +78,18 @@ def main():
 
     m_perc = perceptron.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1)
     error_rate = perceptron.test(m_perc, test_x, test_y)
-    print error_rate
-    print "*****************"
+    print(error_rate)
+    print("******************")
 
     m_svm = svm.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1, 0.5)
     error_rate = svm.test(m_svm, test_x, test_y)
-    print error_rate
-    print "******************"
+    print(error_rate)
+    print("******************")
     m_pa = pa.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1])
     error_rate = pa.test(m_pa, test_x, test_y)
-    print error_rate
+    print(error_rate)
 
-    print "******************"
+    print("******************")
     tester.print_results(m_pa, m_svm, m_pa, test_x)
 
     """
