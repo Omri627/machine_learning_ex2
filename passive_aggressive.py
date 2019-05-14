@@ -54,3 +54,15 @@ def norm(vector):
     for x in vector:
         sum = sum + (x * x)
     return math.sqrt(sum)
+
+def getBestModel(Train_X, Train_Y, Test_X, Test_Y):
+    instances = 15
+    min_error_rate = 1
+    min_model = 0
+    for i in range(0, instances):
+        w = train(Train_X, Train_Y)
+        error_rate = test(w, Test_X, Test_Y)
+        if error_rate < min_error_rate:
+            min_error_rate = error_rate
+            min_model = w
+    return min_model

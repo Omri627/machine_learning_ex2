@@ -55,14 +55,17 @@ def main():
     # change the M F I to 0 1 2
     data_arr = one_hot_encoding(data_arr)
 
-    test_x = data_arr[:100, :]
+    test_x = np.genfromtxt(sys.argv[3], delimiter=',', dtype="|U5")
+    test_x = one_hot_encoding(test_x)
+    test_x = np.array(test_x, dtype=float)
+    test_x = z_score(test_x)
     # normalize the data-set
     data_set = np.array(data_arr, dtype=float)
     data_set = z_score(data_set)
 
     # load labels file
     label_set = np.genfromtxt(sys.argv[2], delimiter=',', dtype=float)
-    test_y = label_set[:100]
+    test_y = np.genfromtxt(sys.argv[4], delimiter=',', dtype=float)
 
     # shuffle the data
     data_set, label_set = unison_shuffled_copies(data_set, label_set)
@@ -72,8 +75,10 @@ def main():
     label_size = len(label_set)
     split_data = np.split(data_set, [int(0.90 * samples_size), samples_size])
     split_label = np.split(label_set, [int(0.90 * label_size), label_size])
-    # tester.test_pa(split_data[0], split_label[0], split_data[1], split_label[1])
-
+    model = perceptron.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1)
+    error_rate = perceptron.test(model, test_x, test_y)
+    print error_rate
+    """
     w = perceptron.train(split_data[0], split_label[0], 0.1)
     print(perceptron.test(w, split_data[1], split_label[1]))
     print("******************")
@@ -82,7 +87,7 @@ def main():
     print("******************")
     w3 = pa.train(split_data[0], split_label[0])
     print(pa.test(w3, split_data[1], split_label[1]))
-
+    """
 
 if __name__ == "__main__":
     main()

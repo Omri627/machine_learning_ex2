@@ -1,7 +1,6 @@
 import numpy as np
 import random
 
-
 # X: samples Y:labels
 def train(X, Y, eta):
     samples_size = len(X)
@@ -10,7 +9,7 @@ def train(X, Y, eta):
     w = np.zeros((3, features_size))
     indexes = np.arange(0, samples_size)
     # the number of times to run through the training data while updating the weight.
-    epochs = 20
+    epochs = 10
     for e in range(epochs):
         # shuffle the data
         random.shuffle(indexes)
@@ -26,7 +25,6 @@ def train(X, Y, eta):
                 w[y] = w[y] + eta * X[i]
     return w
 
-
 def test(w, X, Y):
     err = 0
     samples_size = len(X)
@@ -37,6 +35,17 @@ def test(w, X, Y):
             err += 1
     return float(err) / samples_size
 
-
 def predict(w, input):
     return np.argmax(w, input)
+
+def getBestModel(Train_X, Train_Y, Test_X, Test_Y, eta):
+    instances = 15
+    min_error_rate = 1
+    min_model = 0
+    for i in range(0, instances):
+        w = train(Train_X, Train_Y, eta)
+        error_rate = test(w, Test_X, Test_Y)
+        if error_rate < min_error_rate:
+            min_error_rate = error_rate
+            min_model = w
+    return min_model
