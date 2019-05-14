@@ -35,8 +35,6 @@ def test(w, X, Y):
         y = int(Y[i])
         if y_hat != y:
             err += 1
-        print "prediction:", y_hat
-        print "real result:", y
     return float(err) / samples_size
 
 def predict(w, input):

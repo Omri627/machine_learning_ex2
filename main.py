@@ -78,6 +78,14 @@ def main():
     model = perceptron.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1)
     error_rate = perceptron.test(model, test_x, test_y)
     print error_rate
+    print "*****************"
+    model = svm.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1, 0.5)
+    error_rate = svm.test(model, test_x, test_y)
+    print error_rate
+    print "******************"
+    model = pa.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1])
+    error_rate = pa.test(model, test_x, test_y)
+    print error_rate
     """
     w = perceptron.train(split_data[0], split_label[0], 0.1)
     print(perceptron.test(w, split_data[1], split_label[1]))
