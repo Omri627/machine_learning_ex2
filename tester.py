@@ -12,7 +12,7 @@ def print_results(m_percepton, m_svm, m_pa, test_X):
         y_perc = np.argmax(np.dot(m_percepton, test_X[i]))
         y_svm = np.argmax(np.dot(m_svm, test_X[i]))
         y_pa = np.argmax(np.dot(m_pa, test_X[i]))
-        print("perceptron:", y_perc, ", svm:", y_svm, ", pa:", y_pa)
+        print("perceptron: ", y_perc, ", svm: ", y_svm, ", pa: ", y_pa, sep='')
 
 
 def test_peceptron(X, Y, testX, testY):

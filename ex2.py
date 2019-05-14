@@ -55,7 +55,7 @@ def real_time():
     # change the M F I to 0 1 2
     data_arr = one_hot_encoding(data_arr)
 
-    test_x = np.genfromtxt(sys.argv[2], delimiter=',', dtype="|U5")
+    test_x = np.genfromtxt(sys.argv[3], delimiter=',', dtype="|U5")
     test_x = one_hot_encoding(test_x)
     test_x = np.array(test_x, dtype=float)
     test_x = z_score(test_x)
