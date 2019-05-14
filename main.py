@@ -8,14 +8,18 @@ from scipy import stats
 
 
 def one_hot_encoding(data):
-    encode = {
-        "M": np.array([0, 0, 1]),
-        "F": np.array([0, 1, 0]),
-        "I": np.array([1, 0, 0])
-    }
+    arr = np.zeros((len(data), 3))
     for i, row in enumerate(data):
-        # transform it into vector
-        data[i][0] = encode[row[0]]
+        if row[0] == 'M':
+            arr[i][0] = 1
+        elif row[0] == 'F':
+            arr[i][1] = 1
+        else:
+            arr[i][2] = 1
+
+    data2 = np.array(data[:, 1:])
+    data2 = np.concatenate((data2, arr), axis=1)
+    return data2
 
 
 def encoding(data):
@@ -49,7 +53,7 @@ def main():
     # read data from csv to data frame
     data_arr = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
     # change the M F I to 0 1 2
-    encoding(data_arr)
+    data_arr = one_hot_encoding(data_arr)
 
     test_x = data_arr[:100, :]
     # normalize the data-set

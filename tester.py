@@ -5,31 +5,34 @@ import svm
 import passive_aggressive as pa
 import matplotlib.pyplot as plt
 
+
 def test_peceptron(X, Y, testX, testY):
     test_amount = 15
     result = np.zeros(test_amount)
     values = np.zeros(test_amount)
     for i in range(0, test_amount):
-        eta = round(random.uniform(0, 1),2)
+        eta = round(random.uniform(0, 1), 2)
         model = perceptron.train(X, Y, eta)
         error_rate = perceptron.test(model, testX, testY)
         result[i] = error_rate
         values[i] = eta
     draw_graph(result, values)
 
+
 def test_svm(X, Y, testX, testY):
     test_amount = 15
     result = np.zeros(test_amount)
     values = np.zeros(test_amount)
     for i in range(0, test_amount):
-        eta = round(random.uniform(0, 1),2)
-        regulation = round(random.uniform(0, 1),2)
+        eta = round(random.uniform(0, 1), 2)
+        regulation = round(random.uniform(0, 1), 2)
         model = svm.train(X, Y, eta, regulation)
         error_rate = svm.test(model, testX, testY)
         result[i] = error_rate
         values[i] = eta
-        print eta, regulation, error_rate
+        print(eta, regulation, error_rate)
     draw_graph(result, values)
+
 
 def test_pa(X, Y, testX, testY):
     test_amount = 15
@@ -40,9 +43,8 @@ def test_pa(X, Y, testX, testY):
         error_rate = pa.test(model, testX, testY)
         result[i] = error_rate
         values[i] = i
-        print error_rate
+        print(error_rate)
     draw_graph(result, values)
-
 
 
 def draw_graph(results, titles):
@@ -52,7 +54,7 @@ def draw_graph(results, titles):
     # plotting a bar chart
     plt.rcParams.update({'font.size': 8})
     plt.bar(left, results, tick_label=titles,
-            width=0.8, color=["blue", "green", "yellow","red"])
+            width=0.8, color=["blue", "green", "yellow", "red"])
 
     # naming the x-axis
     plt.xlabel('x - axis')

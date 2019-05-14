@@ -1,6 +1,7 @@
 import numpy as np
 import random
 
+
 # X: samples Y:labels
 def train(X, Y, eta):
     samples_size = len(X)
@@ -25,6 +26,7 @@ def train(X, Y, eta):
                 w[y] = w[y] + eta * X[i]
     return w
 
+
 def test(w, X, Y):
     err = 0
     samples_size = len(X)
@@ -35,6 +37,6 @@ def test(w, X, Y):
             err += 1
     return float(err) / samples_size
 
+
 def predict(w, input):
     return np.argmax(w, input)
-

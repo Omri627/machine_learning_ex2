@@ -2,6 +2,7 @@ import numpy as np
 import random
 import math
 
+
 # X: samples Y:labels
 def train(X, Y):
     # quantity of samples in training set
@@ -12,7 +13,7 @@ def train(X, Y):
     # weights matrix
     w = np.zeros((classes, features_size))
     indexes = np.arange(0, samples_size)
-    epochs = 20
+    epochs = 10
     for e in range(0, epochs):
         # shuffle the data
         random.shuffle(indexes)
@@ -32,8 +33,9 @@ def train(X, Y):
                 w[y] = w[y] + tau * X[i]
     return w
 
+
 def test(w, X, Y):
-    err = 0         # error counter
+    err = 0  # error counter
     samples_size = len(X)
     for i in range(0, samples_size):
         y_hat = np.argmax(np.dot(w, X[i]))
@@ -42,8 +44,10 @@ def test(w, X, Y):
             err += 1
     return float(err) / samples_size
 
+
 def predict(w, input):
     return np.argmax(w, input)
+
 
 def norm(vector):
     sum = 0
