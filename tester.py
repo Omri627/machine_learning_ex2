@@ -5,7 +5,6 @@ import svm
 import passive_aggressive as pa
 import matplotlib.pyplot as plt
 
-
 def print_results(m_percepton, m_svm, m_pa, test_X):
     samples_size = len(test_X)
     for i in range(0, samples_size):
@@ -13,7 +12,6 @@ def print_results(m_percepton, m_svm, m_pa, test_X):
         y_svm = np.argmax(np.dot(m_svm, test_X[i]))
         y_pa = np.argmax(np.dot(m_pa, test_X[i]))
         print "perceptron: ", y_perc, ", svm: ", y_svm, ", pa: ", y_pa
-
 
 def test_perceptron(X, Y,  testX, testY):
     test_amount = 5
@@ -24,7 +22,7 @@ def test_perceptron(X, Y,  testX, testY):
     for i in range(0, test_amount):
         eta = round(random.uniform(0, 1), 2)
         regulation = round(random.uniform(0, 1), 2)
-        model = svm.getBestModel(X, Y, sample_size ,eta, 0.25)
+        model = perceptron.getBestModel(X, Y, sample_size ,eta)
         error_rate = perceptron.test(model, testX, testY)
         result[i] = error_rate
         values[i] = regulation
@@ -59,7 +57,7 @@ def test_pa(X, Y,  testX, testY):
     sample_size = len(X)
     sum = 0
     for i in range(0, test_amount):
-        model = svm.getBestModel(X, Y, sample_size)
+        model = pa.getBestModel(X, Y, sample_size)
         error_rate = pa.test(model, testX, testY)
         result[i] = error_rate
         sum = sum + error_rate

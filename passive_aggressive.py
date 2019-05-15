@@ -80,7 +80,7 @@ def getBestModelPerShuffle(Train_X, Train_Y, Test_X, Test_Y):
             min_error_rate = error_rate
             min_model = w
     # return the instance of model which obtained the min error rate
-    return min_model
+    return min_model, min_error_rate
 
 def getBestModel(Train_X, Train_Y, samples_size):
     shuffles_amount = 5
