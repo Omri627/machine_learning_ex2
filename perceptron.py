@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import math
+import tester
 
 def train(X, Y, eta):
     """
@@ -54,8 +55,8 @@ def test(w, X, Y):
 def predict(w, input):
     return np.argmax(w, input)
 
-def getBestModel(Train_X, Train_Y, Test_X, Test_Y, eta):
-    instances = 40              # number of models to train
+def getBestModelPerShuffle(Train_X, Train_Y, Test_X, Test_Y, eta):
+    instances = 15              # number of models to train
     min_error_rate = 1          # min error rate of models
     min_model = []              # instance of model which obtained the min error rate
     for i in range(0, instances):
@@ -69,3 +70,18 @@ def getBestModel(Train_X, Train_Y, Test_X, Test_Y, eta):
             min_model = w
     # return the instance of model which obtained the min error rate
     return min_model
+
+def getBestModel(Train_X, Train_Y, samples_size , eta):
+    shuffles_amount = 15
+    min_model = []
+    min_error_rate = 1
+    for i in range(0, shuffles_amount):
+        Train_X, Train_Y = tester.unison_shuffled_copies(Train_X, Train_Y)
+        split_data = np.split(Train_X, [int(0.80 * samples_size), samples_size])
+        split_label = np.split(Train_Y, [int(0.80 * samples_size), samples_size])
+        model, error_rate = getBestModelPerShuffle(split_data[0], split_label[0], split_data[1], split_label[1], eta)
+        if error_rate < min_error_rate:
+            min_error_rate = error_rate
+            min_model = model
+    return min_model
+

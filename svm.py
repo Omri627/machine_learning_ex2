@@ -97,7 +97,7 @@ def getBestModelPerShuffle(Train_X, Train_Y, Test_X, Test_Y, eta, regulation):
 
 
 def getBestModel(Train_X, Train_Y, samples_size , eta, regulation):
-    shuffles_amount = 20
+    shuffles_amount = 5
     min_model = []
     min_error_rate = 1
     for i in range(0, shuffles_amount):
