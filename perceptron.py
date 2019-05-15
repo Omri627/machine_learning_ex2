@@ -56,7 +56,7 @@ def predict(w, input):
     return np.argmax(w, input)
 
 def getBestModelPerShuffle(Train_X, Train_Y, Test_X, Test_Y, eta):
-    instances = 15              # number of models to train
+    instances = 20              # number of models to train
     min_error_rate = 1          # min error rate of models
     min_model = []              # instance of model which obtained the min error rate
     for i in range(0, instances):
@@ -72,7 +72,7 @@ def getBestModelPerShuffle(Train_X, Train_Y, Test_X, Test_Y, eta):
     return min_model
 
 def getBestModel(Train_X, Train_Y, samples_size , eta):
-    shuffles_amount = 15
+    shuffles_amount = 5
     min_model = []
     min_error_rate = 1
     for i in range(0, shuffles_amount):

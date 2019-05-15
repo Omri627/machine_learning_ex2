@@ -111,7 +111,7 @@ def main():
     #split_data = np.split(data_set, [int(0.80 * samples_size), samples_size])
     #split_label = np.split(label_set, [int(0.80 * label_size), label_size])
 
-    tester.test_peceptron(data_set, label_set, test_x, test_y)
+    tester.test_pa(data_set, label_set, test_x, test_y)
     """
     m_perc = perceptron.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1)
     error_rate = perceptron.test(m_perc, test_x, test_y)

@@ -19,9 +19,6 @@ def train(X, Y):
     indexes = np.arange(0, samples_size)    # indexes vector used to pick random examples from samples set
     # start with the all-zeroes weight matrix
     w = np.zeros((classes_size, features_size))
-    for i in range(0, classes_size):
-        for j in range(0, features_size):
-            w[i][j] = 0.1
     # the number of times to run through the training data while updating the weight.
     epochs = 10
     for e in range(0, epochs):
@@ -70,7 +67,7 @@ def norm(vector):
     return math.sqrt(sum)
 
 def getBestModelPerShuffle(Train_X, Train_Y, Test_X, Test_Y):
-    instances = 15              # number of models to train
+    instances = 20              # number of models to train
     min_error_rate = 1          # min error rate of models
     min_model = []              # instance of model which obtained the min error rate
     for i in range(0, instances):
@@ -86,7 +83,7 @@ def getBestModelPerShuffle(Train_X, Train_Y, Test_X, Test_Y):
     return min_model
 
 def getBestModel(Train_X, Train_Y, samples_size):
-    shuffles_amount = 20
+    shuffles_amount = 5
     min_model = []
     min_error_rate = 1
     for i in range(0, shuffles_amount):
