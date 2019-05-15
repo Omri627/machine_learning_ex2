@@ -16,7 +16,6 @@ def one_hot_encoding(data):
             arr[i][1] = 1
         else:
             arr[i][2] = 1
-
     data2 = np.array(data[:, 1:])
     data2 = np.concatenate((data2, arr), axis=1)
     return data2
@@ -85,7 +84,7 @@ def real_time():
 
 
 def main():
-    '''
+
     # read data from csv to data frame
     data_arr = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
     # change the M F I to 0 1 2
@@ -109,9 +108,11 @@ def main():
     # split the data set to 80% training set and 20% to the test set
     samples_size = len(data_set)
     label_size = len(label_set)
-    split_data = np.split(data_set, [int(0.90 * samples_size), samples_size])
-    split_label = np.split(label_set, [int(0.90 * label_size), label_size])
+    split_data = np.split(data_set, [int(0.80 * samples_size), samples_size])
+    split_label = np.split(label_set, [int(0.80 * label_size), label_size])
 
+    tester.test_svm(split_data[0], split_label[0], split_data[1], split_label[1], test_x, test_y)
+    """
     m_perc = perceptron.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1)
     error_rate = perceptron.test(m_perc, test_x, test_y)
     print(error_rate)
@@ -126,10 +127,10 @@ def main():
     print(error_rate)
 
     print("******************")
-    tester.print_results(m_perc, m_svm, m_pa, test_x)
-    '''
+    #tester.print_results(m_perc, m_svm, m_pa, test_x)
+    """
 
-    real_time()
+   # real_time()
 
 
 if __name__ == "__main__":
