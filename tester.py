@@ -22,7 +22,7 @@ def test_peceptron(X, Y, validateX, validateY,  testX, testY):
     sum = 0
     for i in range(0, test_amount):
         eta = round(random.uniform(0, 1), 2)
-        model = perceptron.getBestModel(X, Y, validateX, validateY, 0.1)
+        model = perceptron.getBestModelPerShuffle(X, Y, validateX, validateY, 0.1)
         error_rate = perceptron.test(model, testX, testY)
         result[i] = error_rate
         values[i] = eta
@@ -92,3 +92,8 @@ def draw_graph(results, titles):
 
     # function to show the plot
     plt.show()
+
+def unison_shuffled_copies(a, b):
+    assert len(a) == len(b)
+    p = np.random.permutation(len(a))
+    return a[p], b[p]
