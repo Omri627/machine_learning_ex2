@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import math
+import tester
 
 def train(X, Y, eta, regulation):
     """
@@ -94,17 +95,13 @@ def getBestModelPerShuffle(Train_X, Train_Y, Test_X, Test_Y, eta, regulation):
     # return the instance of model which obtained the min error rate
     return min_model, min_error_rate
 
-def unison_shuffled_copies(a, b):
-    assert len(a) == len(b)
-    p = np.random.permutation(len(a))
-    return a[p], b[p]
 
 def getBestModel(Train_X, Train_Y, samples_size , eta, regulation):
     shuffles_amount = 20
     min_model = []
     min_error_rate = 1
     for i in range(0, shuffles_amount):
-        Train_X, Train_Y = unison_shuffled_copies(Train_X, Train_Y)
+        Train_X, Train_Y = tester.unison_shuffled_copies(Train_X, Train_Y)
         split_data = np.split(Train_X, [int(0.80 * samples_size), samples_size])
         split_label = np.split(Train_Y, [int(0.80 * samples_size), samples_size])
         model, error_rate = getBestModelPerShuffle(split_data[0], split_label[0], split_data[1], split_label[1], eta, regulation)
