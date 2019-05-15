@@ -51,7 +51,7 @@ def unison_shuffled_copies(a, b):
 def real_time():
     # read data from csv to data frame
     data_arr = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
-    # change the M F I to 0 1 2
+    # change the M F I to vectors
     data_arr = one_hot_encoding(data_arr)
 
     test_x = np.genfromtxt(sys.argv[3], delimiter=',', dtype="|U5")
@@ -65,26 +65,20 @@ def real_time():
     # load labels file
     label_set = np.genfromtxt(sys.argv[2], delimiter=',', dtype=float)
 
-    # shuffle the data
-    data_set, label_set = unison_shuffled_copies(data_set, label_set)
-
     # split the data set to 80% training set and 20% to the test set
     samples_size = len(data_set)
-    label_size = len(label_set)
-    split_data = np.split(data_set, [int(0.80 * samples_size), samples_size])
-    split_label = np.split(label_set, [int(0.80 * label_size), label_size])
 
-    m_perc = perceptron.getBestModelPerShuffle(split_data[0], split_label[0], split_data[1], split_label[1], 0.1)
+    m_perc = perceptron.getBestModel(data_set, label_set, samples_size, 0.1)
 
-    m_svm = svm.getBestModelPerShuffle(split_data[0], split_label[0], split_data[1], split_label[1], 0.1, 0.5)
+    m_svm = svm.getBestModel(data_set, label_set, samples_size, 0.1, 0.25)
 
-    m_pa = pa.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1])
+    m_pa = pa.getBestModel(data_set, label_set, samples_size)
 
     tester.print_results(m_perc, m_svm, m_pa, test_x)
 
 
 def main():
-
+    """
     # read data from csv to data frame
     data_arr = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
     # change the M F I to 0 1 2
@@ -111,7 +105,9 @@ def main():
     #split_data = np.split(data_set, [int(0.80 * samples_size), samples_size])
     #split_label = np.split(label_set, [int(0.80 * label_size), label_size])
 
-    tester.test_perceptron(data_set, label_set, test_x, test_y)
+    tester.test_pa(data_set, label_set, test_x, test_y)
+    """
+
     """
     m_perc = perceptron.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1)
     error_rate = perceptron.test(m_perc, test_x, test_y)
@@ -130,7 +126,7 @@ def main():
     #tester.print_results(m_perc, m_svm, m_pa, test_x)
     """
 
-   # real_time()
+    real_time()
 
 
 if __name__ == "__main__":
