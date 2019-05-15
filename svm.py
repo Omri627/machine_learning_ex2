@@ -78,8 +78,8 @@ def predict(w, input):
     return np.argmax(w, input)
 
 
-def getBestModel(Train_X, Train_Y, Test_X, Test_Y, eta, regulation):
-    instances = 15                 # number of models to train
+def getBestModelPerShuffle(Train_X, Train_Y, Test_X, Test_Y, eta, regulation):
+    instances = 20                 # number of models to train
     min_error_rate = 1             # min error rate of models
     min_model = []                 # instance of model which obtained the min error rate
     for i in range(0, instances):
@@ -92,4 +92,26 @@ def getBestModel(Train_X, Train_Y, Test_X, Test_Y, eta, regulation):
             min_error_rate = error_rate
             min_model = w
     # return the instance of model which obtained the min error rate
+    return min_model, min_error_rate
+
+def unison_shuffled_copies(a, b):
+    assert len(a) == len(b)
+    p = np.random.permutation(len(a))
+    return a[p], b[p]
+
+def getBestModel(Train_X, Train_Y, samples_size , eta, regulation):
+    shuffles_amount = 20
+    min_model = []
+    min_error_rate = 1
+    for i in range(0, shuffles_amount):
+        Train_X, Train_Y = unison_shuffled_copies(Train_X, Train_Y)
+        split_data = np.split(Train_X, [int(0.80 * samples_size), samples_size])
+        split_label = np.split(Train_Y, [int(0.80 * samples_size), samples_size])
+        model, error_rate = getBestModelPerShuffle(split_data[0], split_label[0], split_data[1], split_label[1], eta, regulation)
+        if error_rate < min_error_rate:
+            min_error_rate = error_rate
+            min_model = model
     return min_model
+
+
+

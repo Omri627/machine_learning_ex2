@@ -71,12 +71,12 @@ def real_time():
     # split the data set to 80% training set and 20% to the test set
     samples_size = len(data_set)
     label_size = len(label_set)
-    split_data = np.split(data_set, [int(0.90 * samples_size), samples_size])
-    split_label = np.split(label_set, [int(0.90 * label_size), label_size])
+    split_data = np.split(data_set, [int(0.80 * samples_size), samples_size])
+    split_label = np.split(label_set, [int(0.80 * label_size), label_size])
 
     m_perc = perceptron.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1)
 
-    m_svm = svm.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1, 0.5)
+    m_svm = svm.getBestModelPerShuffle(split_data[0], split_label[0], split_data[1], split_label[1], 0.1, 0.5)
 
     m_pa = pa.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1])
 
@@ -103,15 +103,15 @@ def main():
     test_y = np.genfromtxt(sys.argv[4], delimiter=',', dtype=float)
 
     # shuffle the data
-    data_set, label_set = unison_shuffled_copies(data_set, label_set)
+    #data_set, label_set = unison_shuffled_copies(data_set, label_set)
 
     # split the data set to 80% training set and 20% to the test set
-    samples_size = len(data_set)
-    label_size = len(label_set)
-    split_data = np.split(data_set, [int(0.80 * samples_size), samples_size])
-    split_label = np.split(label_set, [int(0.80 * label_size), label_size])
+    #samples_size = len(data_set)
+    #label_size = len(label_set)
+    #split_data = np.split(data_set, [int(0.80 * samples_size), samples_size])
+    #split_label = np.split(label_set, [int(0.80 * label_size), label_size])
 
-    tester.test_svm(split_data[0], split_label[0], split_data[1], split_label[1], test_x, test_y)
+    tester.test_svm(data_set, label_set, test_x, test_y)
     """
     m_perc = perceptron.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1)
     error_rate = perceptron.test(m_perc, test_x, test_y)

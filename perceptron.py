@@ -55,7 +55,7 @@ def predict(w, input):
     return np.argmax(w, input)
 
 def getBestModel(Train_X, Train_Y, Test_X, Test_Y, eta):
-    instances = 15              # number of models to train
+    instances = 40              # number of models to train
     min_error_rate = 1          # min error rate of models
     min_model = []              # instance of model which obtained the min error rate
     for i in range(0, instances):

@@ -31,20 +31,21 @@ def test_peceptron(X, Y, validateX, validateY,  testX, testY):
     print sum
     draw_graph(result, values)
 
-def test_svm(X, Y, validateX, validateY,  testX, testY):
-    test_amount = 15
+def test_svm(X, Y,  testX, testY):
+    test_amount = 3
     result = np.zeros(test_amount)
     values = np.zeros(test_amount)
+    sample_size = len(X)
     sum = 0
     for i in range(0, test_amount):
         eta = round(random.uniform(0, 1), 2)
         regulation = round(random.uniform(0, 1), 2)
-        model = svm.getBestModel(X, Y, validateX, validateY, eta, 0.25)
+        model = svm.getBestModel(X, Y, sample_size ,eta, 0.25)
         error_rate = svm.test(model, testX, testY)
         result[i] = error_rate
         values[i] = regulation
         sum = sum + error_rate
-    sum = sum / 15
+    sum = sum / test_amount
     print sum
     draw_graph(result, values)
 
