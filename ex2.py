@@ -6,9 +6,34 @@ import svm
 import passive_aggressive as pa
 from scipy import stats
 
+def unison_shuffled_copies(samples, labels, samples_size):
+    """
+    unison_shuffled_copies method gets samples and labels sets
+    and shuffle them together with the same permutation.
+    i.e the sample and his corresponding label stored with the same indentation in samples, labels arrays respectively
+    :param samples: set of samples
+    :param labels: set of labels
+    :return: returns shuffled vectors of samples and labels
+    """
+    assert len(samples) == len(labels)
+    p = np.random.permutation(samples_size)
+    return samples[p], labels[p]
 
-def one_hot_encoding(data):
-    arr = np.zeros((len(data), 3))
+def one_hot_encoding(data, samples_size):
+    """
+    One hot encoding is a process by which categorical variables are converted into a form
+    that could be provided to machine learning algorithms to do a better job in prediction.
+    Categorical data are variables that contain label values rather than numeric values.
+    Each label values gets integer representation.
+    a one-hot encoding can be applied to the integer representation.
+    the label variable is removed from samples features and instead
+    a feature is added for each label value.
+    the method applies 1 for the feature with the original label value of current sample.
+
+    :param data: sets of samples
+    :return: returns the set of samples after described modifications
+    """
+    arr = np.zeros((samples_size, 3))
     for i, row in enumerate(data):
         if row[0] == 'M':
             arr[i][0] = 1
@@ -21,7 +46,13 @@ def one_hot_encoding(data):
     return data2
 
 
-def encoding(data):
+def base_encoding(data):
+    """
+    each unique category value is assigned an integer value.
+
+    :param data: set of samples
+    :return: returns set of samples after described modifications
+    """
     encode = {
         "M": 1,
         "F": 2,
@@ -33,59 +64,44 @@ def encoding(data):
 
 
 def z_score(data):
+    """
+    the method normalized the samples set using z_score algorithm
+    Normalization is a technique applied as part of data preparation for machine learning.
+    The goal of normalization is to change the values of numeric columns in the dataset to a common scale,
+    without distorting differences in the ranges of values.
+
+    :param data: set of samples
+    :return: returns the set of samples after normalization process
+    """
     data = np.array(data)
     return stats.mstats.zscore(data)
 
 
 def min_max_normalization(data):
+    """
+    the method normalized the samples set using min_max normalization algorithm
+    Normalization is a technique applied as part of data preparation for machine learning.
+    The goal of normalization is to change the values of numeric columns in the dataset to a common scale,
+    without distorting differences in the ranges of values.
+
+    :param data: set of samples
+    :return: returns the data after normalization process
+    """
     for i, x in enumerate(data):
         data[i] = ((x - np.min(x)) / (np.max(x) - np.min(x)))
 
 
-def unison_shuffled_copies(a, b):
-    assert len(a) == len(b)
-    p = np.random.permutation(len(a))
-    return a[p], b[p]
-
-
-def real_time():
+def ex2_tester():
     # read data from csv to data frame
     data_arr = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
-    # change the M F I to vectors
-    data_arr = one_hot_encoding(data_arr)
+    # applies one hot enconding over samples set
+    samples_size = len(data_arr)        # number of samples in training set
+    data_arr = one_hot_encoding(data_arr, samples_size)
 
+    # read labels training set data
     test_x = np.genfromtxt(sys.argv[3], delimiter=',', dtype="|U5")
-    test_x = one_hot_encoding(test_x)
-    test_x = np.array(test_x, dtype=float)
-    test_x = z_score(test_x)
-    # normalize the data-set
-    data_set = np.array(data_arr, dtype=float)
-    data_set = z_score(data_set)
-
-    # load labels file
-    label_set = np.genfromtxt(sys.argv[2], delimiter=',', dtype=float)
-
-    # split the data set to 80% training set and 20% to the test set
-    samples_size = len(data_set)
-
-    m_perc = perceptron.getBestModel(data_set, label_set, samples_size, 0.1)
-
-    m_svm = svm.getBestModel(data_set, label_set, samples_size, 0.1, 0.25)
-
-    m_pa = pa.getBestModel(data_set, label_set, samples_size)
-
-    tester.print_results(m_perc, m_svm, m_pa, test_x)
-
-
-def main():
-    """
-    # read data from csv to data frame
-    data_arr = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
-    # change the M F I to 0 1 2
-    data_arr = one_hot_encoding(data_arr)
-
-    test_x = np.genfromtxt(sys.argv[3], delimiter=',', dtype="|U5")
-    test_x = one_hot_encoding(test_x)
+    test_size = len(test_x)             # number of samples in test set
+    test_x = one_hot_encoding(test_x, test_size)
     test_x = np.array(test_x, dtype=float)
     test_x = z_score(test_x)
     # normalize the data-set
@@ -96,37 +112,41 @@ def main():
     label_set = np.genfromtxt(sys.argv[2], delimiter=',', dtype=float)
     test_y = np.genfromtxt(sys.argv[4], delimiter=',', dtype=float)
 
-    # shuffle the data
-    #data_set, label_set = unison_shuffled_copies(data_set, label_set)
+    # test passive-aggressive algorithm
+    tester.test_perceptron(data_set, label_set, test_x, test_y)
+    tester.test_svm(data_set, label_set, test_x, test_y)
+    tester.test_pa(data_set, label_set, test_x, test_y)
+
+def main():
+
+    # read data from csv to data frame
+    data_arr = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
+    # applies one hot enconding over samples set
+    samples_size = len(data_arr)        # number of samples in training set
+    data_arr = one_hot_encoding(data_arr, samples_size)
+
+    # read labels training set data
+    test_x = np.genfromtxt(sys.argv[3], delimiter=',', dtype="|U5")
+    test_size = len(test_x)             # number of samples in test set
+    test_x = one_hot_encoding(test_x, test_size)
+    test_x = np.array(test_x, dtype=float)
+    test_x = z_score(test_x)
+    # normalize the data-set
+    data_set = np.array(data_arr, dtype=float)
+    data_set = z_score(data_set)
+
+    # load labels file
+    label_set = np.genfromtxt(sys.argv[2], delimiter=',', dtype=float)
 
     # split the data set to 80% training set and 20% to the test set
-    #samples_size = len(data_set)
-    #label_size = len(label_set)
-    #split_data = np.split(data_set, [int(0.80 * samples_size), samples_size])
-    #split_label = np.split(label_set, [int(0.80 * label_size), label_size])
+    # trained models with perceptron, svm and passive aggressive algorithm
+    regulation_constant = 0.25              # regulation constant value
+    m_perc = perceptron.getBestModel(data_set, label_set, samples_size)
+    m_svm = svm.getBestModel(data_set, label_set, samples_size, regulation_constant)
+    m_pa = pa.getBestModel(data_set, label_set, samples_size)
 
-    tester.test_pa(data_set, label_set, test_x, test_y)
-    """
-
-    """
-    m_perc = perceptron.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1)
-    error_rate = perceptron.test(m_perc, test_x, test_y)
-    print(error_rate)
-    print("******************")
-
-    m_svm = svm.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1], 0.1, 0.5)
-    error_rate = svm.test(m_svm, test_x, test_y)
-    print(error_rate)
-    print("******************")
-    m_pa = pa.getBestModel(split_data[0], split_label[0], split_data[1], split_label[1])
-    error_rate = pa.test(m_pa, test_x, test_y)
-    print(error_rate)
-
-    print("******************")
-    #tester.print_results(m_perc, m_svm, m_pa, test_x)
-    """
-
-    real_time()
+    # prints out the prediction of given models for each sample in test set
+    tester.print_results(m_perc, m_svm, m_pa, test_x, test_size)
 
 
 if __name__ == "__main__":

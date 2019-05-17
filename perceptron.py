@@ -2,8 +2,9 @@ import numpy as np
 import random
 import math
 import tester
+import ex2
 
-def train(X, Y, eta):
+def train(X, Y, samples_size):
     """
     perceptron algrithm used to form a linear classification/decision boundary between different classes.
     perceptron is supervised learning algorithm which analyzes the training data and produces
@@ -15,12 +16,12 @@ def train(X, Y, eta):
     :param regulation:
     :return: returns a model which can be used for mapping new cases
     """
-    samples_size = len(X)                   # number of samples in data set
-    features_size = len(X[0])               # number of features of input data
-    w = np.zeros((3, features_size))        # start with the all-zeroes weight matrix
-    indexes = np.arange(0, samples_size)    # indexes vector used to pick random examples from samples set
+    classes_size = 3                                # number of classes
+    features_size = len(X[0])                       # number of features of input data
+    w = np.zeros((classes_size, features_size))     # start with the all-zeroes weight matrix
+    indexes = np.arange(0, samples_size)            # indexes vector used to pick random examples from samples set
     # the number of times to run through the training data while updating the weight.
-    epochs = 50
+    epochs = 15
     for e in range(epochs):
         # shuffle the data-set
         random.shuffle(indexes)
@@ -41,29 +42,39 @@ def train(X, Y, eta):
     return w
 
 
-def test(w, X, Y):
-    err = 0
-    samples_size = len(X)
-    for i in range(0, samples_size):
-        y_hat = np.argmax(np.dot(w, X[i]))
-        y = int(Y[i])
-        if y_hat != y:
-            err += 1
-    return float(err) / samples_size
+def predict(w, example):
+    """
+    predict method gets the model and example
+    and predicts his label using the model
 
+    :param w: model trained by perceptron
+    :param example: example to predict his label
+    :return: returns the label of example predicted by model
+    """
+    return np.argmax(w, example)
 
-def predict(w, input):
-    return np.argmax(w, input)
+def getBestModelPerShuffle(train_X, train_Y, test_X, test_Y):
+    """
+    getBestModelPerShuffle method trains fixed amount of models on training set using perceptron algorithm
+    for each model the method computes the error rate
+    and pick the best model i.e the model which gains the minimum error rate on validation set
 
-def getBestModelPerShuffle(Train_X, Train_Y, Test_X, Test_Y, eta):
+    :param train_X: set of examples in training set
+    :param train_Y: set of labels in training set
+    :param validation_X: set of examples of validation set
+    :param validation_Y: set of labels of validation set
+    :return: returns the best model which gains the minimum error rate
+    """
     instances = 20              # number of models to train
     min_error_rate = 1          # min error rate of models
     min_model = []              # instance of model which obtained the min error rate
+    train_amount = len(train_X) # amount of samples in training set
+    test_amount = len(test_X)   # amount of samples in test set
     for i in range(0, instances):
         # builds new model by perceptron algorithm on training set
-        w = train(Train_X, Train_Y, eta)
+        w = train(train_X, train_Y, train_amount)
         # computes the error rate of model on validation set
-        error_rate = test(w, Test_X, Test_Y)
+        error_rate = tester.computeErrorRate(w, test_X, test_Y, test_amount)
         # in case the mode achieved the min error rate, mark the model as the best
         if error_rate < min_error_rate:
             min_error_rate = error_rate
@@ -71,17 +82,36 @@ def getBestModelPerShuffle(Train_X, Train_Y, Test_X, Test_Y, eta):
     # return the instance of model which obtained the min error rate
     return min_model, min_error_rate
 
-def getBestModel(Train_X, Train_Y, samples_size , eta):
-    shuffles_amount = 5
-    min_model = []
-    min_error_rate = 1
+def getBestModel(train_X, train_Y, samples_size):
+    """
+    getBestModel method shuffles the training set and divides/splits the whole-training set
+    into two sets: train set and validation set.
+    for each shuffle the method runs getBestModelPerShuffle
+    that trains fixed amount of models and pick the model which gains the minimum error rate on validation set
+    the method, eventually choose the best model over the optimal models trained on different shuffles
+
+    :param train_X: set of examples of training set
+    :param train_Y: set of labels of training set
+    :param samples_size: the amount of samples on training set
+    :param regulation:
+    :return:
+    """
+    training_percentage = 0.80                          # percentage of samples used for training
+    shuffles_amount = 5                                 # amount of times of dividing the training set
+    min_model = []                                      # model which gains the min error rate
+    min_error_rate = 1                                  # minimum error rate of models
     for i in range(0, shuffles_amount):
-        Train_X, Train_Y = tester.unison_shuffled_copies(Train_X, Train_Y)
-        split_data = np.split(Train_X, [int(0.80 * samples_size), samples_size])
-        split_label = np.split(Train_Y, [int(0.80 * samples_size), samples_size])
-        model, error_rate = getBestModelPerShuffle(split_data[0], split_label[0], split_data[1], split_label[1], eta)
+        # shuffle the set of samples
+        train_X, train_Y = ex2.unison_shuffled_copies(train_X, train_Y, samples_size)
+        # split the data and labels of given samples
+        split_data = np.split(train_X, [int(training_percentage * samples_size), samples_size])
+        split_label = np.split(train_Y, [int(training_percentage * samples_size), samples_size])
+        # get best model for this shuffle
+        model, error_rate = getBestModelPerShuffle(split_data[0], split_label[0], split_data[1], split_label[1])
+        # in case this is the best model
         if error_rate < min_error_rate:
             min_error_rate = error_rate
             min_model = model
+    # return the min model i.e the model which gains the minimum error-rate
     return min_model
 
